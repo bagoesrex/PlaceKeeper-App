@@ -12,6 +12,7 @@ class LocationInput extends StatefulWidget {
 
 class _LocationInputState extends State<LocationInput> {
   Location? _pickedLocation;
+  var _isGettingLocation = false;
 
   void _getCurrentLocation() async {
     Location location = Location();
@@ -36,13 +37,32 @@ class _LocationInputState extends State<LocationInput> {
       }
     }
 
+    setState(() {
+      _isGettingLocation = true;
+    });
+
     locationData = await location.getLocation();
     print(locationData.longitude);
-    print(locationData.latitude);
+
+    setState(() {
+      _isGettingLocation = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    Widget previewContent = Text(
+      'No location chosen',
+      textAlign: TextAlign.center,
+      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+        color: Theme.of(context).colorScheme.onSurface,
+      ),
+    );
+
+    if (_isGettingLocation == true) {
+      previewContent = const CircularProgressIndicator();
+    }
+
     return Column(
       children: [
         Container(
@@ -55,13 +75,7 @@ class _LocationInputState extends State<LocationInput> {
               color: Theme.of(context).colorScheme.primary.withAlpha(100),
             ),
           ),
-          child: Text(
-            'No location chosen',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
-          ),
+          child: previewContent,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
