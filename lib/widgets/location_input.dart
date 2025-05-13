@@ -101,6 +101,24 @@ class _LocationInputState extends State<LocationInput> {
         fit: BoxFit.cover,
         width: double.infinity,
         height: double.infinity,
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) {
+            return child;
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
+        errorBuilder: (context, error, stackTrace) {
+          return Center(
+            child: Text(
+              'Gagal memuat lokasi\nSilahkan Coba Lagi',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+          );
+        },
       );
     }
 
