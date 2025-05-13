@@ -26,7 +26,7 @@ class _LocationInputState extends State<LocationInput> {
 
     final lat = _pickedLocation!.latitude;
     final lng = _pickedLocation!.longitude;
-    return 'https://maps.googleapis.com/maps/api/staticmap?center=$lat,$lng&zoom=16&size=600x300&maptype=roadmap&markers=color:red%7Clabel:A%7C$lat,$lng&key=68222d470f863292142042jix3542a0';
+    return 'https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=300&center=lonlat:$lng,$lat&zoom=15&marker=lonlat:$lng,$lat;type:material;color:%23ff3421;icontype:awesome&scaleFactor=2&apiKey=6b81d0217a2a48a78ddb63ab73d1377f';
   }
 
   void _getCurrentLocation() async {
@@ -65,11 +65,11 @@ class _LocationInputState extends State<LocationInput> {
     }
 
     final url = Uri.parse(
-      'https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lng&key=68222d470f863292142042jix3542a0',
+      'https://geocode.maps.co/reverse?lat=$lat&lon=$lng&api_key=68222d470f863292142042jix3542a0',
     );
     final response = await http.get(url);
     final responseData = json.decode(response.body);
-    final address = responseData['results'][0]['formatted_address'];
+    final address = responseData['display_name'];
 
     setState(() {
       _pickedLocation = PlaceLocation(
@@ -107,7 +107,7 @@ class _LocationInputState extends State<LocationInput> {
     return Column(
       children: [
         Container(
-          height: 100,
+          height: 160,
           alignment: Alignment.center,
           width: double.infinity,
           decoration: BoxDecoration(
